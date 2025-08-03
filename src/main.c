@@ -1,45 +1,119 @@
 #include <raylib.h>
-#include <stdint.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include <glib.h>
 
-void DrawBoardGrid(int, int);
-void _DrawBoardGridColumns(int);
-void _DrawBoardGridRows(int);
+typedef struct {
+    int numberOfColumns;
+    int numberOfRows;
+} Size;
 
-void DrawSnake();
+typedef GHashTable Map;
+
+typedef Vector2 Point;
+
+typedef enum {
+    FOOD,
+    SNAKE,
+} EntityType;
 
 typedef struct {
-    
-} Snake;
+    void *data;
+    EntityType type;
+} Entity;
+
+typedef struct {
+    Size size;
+    Map *map;
+} Board;
+
+Board* NewBoard(Size size);
+Entity* GetBoardMapEntityAt(Board *board, Point point);
+void SetBoardMapEntityAt(Board *board, Point point, Entity *enity);
+
+void DrawBoard(Board *board);
+void DrawGuides(Board *board);
+void DrawGuidesColumns(int);
+void DrawGuidesRows(int);
+void DrawFood(Board *board);
 
 int main() {
     SetTargetFPS(60);
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
 
-    // The grid size
-    int width = 10, height = 10;
+    Board *board = NewBoard((Size){10, 10});
 
     InitWindow(800, 800, "Snake!");
     while (!WindowShouldClose()) {
         BeginDrawing();
             ClearBackground(RAYWHITE);
-            DrawBoardGrid(width, height);
-            DrawSnake();
+            DrawBoard(board);
         EndDrawing();
     }
     CloseWindow();
 }
 
-void DrawBoardGrid(int numberOfColumns, int numberOfRows) {
-    _DrawBoardGridColumns(numberOfColumns);
-    _DrawBoardGridRows(numberOfRows);
+Board* NewBoard(Size size) {
+    Board *board = (Board*)malloc(sizeof(Board));
+    Map *map = g_hash_table_new(NULL, NULL);
+
+    *board = (Board){
+        size,
+        map,
+    };
+
+    // TEMP
+    Entity *entity = (Entity*)malloc(sizeof(Entity));
+    *entity = (Entity){
+        NULL,
+        SNAKE,
+    };
+    SetBoardMapEntityAt(board, (Point){0, 0}, entity);
+    // TEMP
+
+
+    return board;
 }
 
-void _DrawBoardGridColumns(int numberOfColumns) {
+Entity* GetBoardMapEntityAt(Board *board, Point point) {
+    Entity *entity;
+    g_hash_table_lookup_extended(
+        board->map, 
+        &point,
+        NULL,
+        (void**)&entity
+    );
+    return entity;
+}
+
+void SetBoardMapEntityAt(Board *board, Point point, Entity *entity) {
+    Point *ptrPoint = (Point*)malloc(sizeof(Point));
+    *ptrPoint = point;
+    g_hash_table_insert(
+        board->map,
+        ptrPoint,
+        entity
+    );
+}
+
+void DrawBoard(Board *board) {
+    DrawGuides(board);
+    DrawFood(board);
+}
+
+void DrawGuides(Board *board) {
+    DrawGuidesColumns(board->size.numberOfColumns);
+    DrawGuidesRows(board->size.numberOfRows);
+}
+
+
+
+void DrawGuidesColumns(int numberOfColumns) {
     int columnSpacing = GetScreenWidth() / numberOfColumns;
     for (int column = 1; column < numberOfColumns; column++) {
         DrawLine(
-            column * columnSpacing, 0, 
+            column * columnSpacing, 
+            0,
             column * columnSpacing, 
             GetScreenHeight(),
             GRAY
@@ -47,7 +121,7 @@ void _DrawBoardGridColumns(int numberOfColumns) {
     }
 }
 
-void _DrawBoardGridRows(int numberOfRows) {
+void DrawGuidesRows(int numberOfRows) {
     int rowSpacing = GetScreenHeight() / numberOfRows;
     for (int row = 1; row < numberOfRows; row++) {
         DrawLine(
@@ -60,6 +134,14 @@ void _DrawBoardGridRows(int numberOfRows) {
     }
 }
 
-void DrawSnake() {
-    // Code here...
+void DrawFood(Board *board) {
+    GHashTableIter iterator;
+    Point *point;
+    Entity *entity;
+    g_hash_table_iter_init(&iterator, board->map);
+    while (g_hash_table_iter_next(&iterator, (gpointer*)point, (gpointer*)entity)) {
+        if (entity->type == FOOD) {
+            DrawRectangle(0, 0, 100, 100, RAYWHITE);
+        }
+    }
 }
