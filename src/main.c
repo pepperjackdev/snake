@@ -1,22 +1,30 @@
 #include <raylib.h>
 #include <stdint.h>
+#include <glib.h>
 
 void DrawBoardGrid(int, int);
 void _DrawBoardGridColumns(int);
 void _DrawBoardGridRows(int);
 
+void DrawSnake();
+
+typedef struct {
+    
+} Snake;
+
 int main() {
     SetTargetFPS(60);
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
 
+    // The grid size
     int width = 10, height = 10;
-    uint8_t board[height][width];
 
     InitWindow(800, 800, "Snake!");
     while (!WindowShouldClose()) {
         BeginDrawing();
             ClearBackground(RAYWHITE);
             DrawBoardGrid(width, height);
+            DrawSnake();
         EndDrawing();
     }
     CloseWindow();
@@ -50,4 +58,8 @@ void _DrawBoardGridRows(int numberOfRows) {
             GRAY
         );
     }
+}
+
+void DrawSnake() {
+    // Code here...
 }

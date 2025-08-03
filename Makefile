@@ -1,11 +1,11 @@
 # Runs the project
-run: build
+r: b
 	./build/*.exe
 
 # Builds the sources
-build: generate
+b: g
 	ninja -C build
 
 # Generates the build-system's scripts
-generate:
+g:
 	cmake -S . -B build/

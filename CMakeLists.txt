@@ -12,11 +12,11 @@ file(GLOB SRC_FILES
     "src/**/*.c"
 )
 
-find_package(raylib CONFIG REQUIRED)
-
 add_executable(snake ${SRC_FILES})
 
-target_link_libraries(snake PRIVATE raylib)
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(deps REQUIRED IMPORTED_TARGET glib-2.0 raylib)
+target_link_libraries(snake PkgConfig::deps)
 
 add_custom_target(run
     COMMAND snake
