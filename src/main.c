@@ -8,35 +8,16 @@ typedef struct {
     int numberOfRows;
 } Size;
 
-typedef GHashTable Map;
-
-typedef Vector2 Point;
-
-typedef enum {
-    FOOD,
-    SNAKE,
-} EntityType;
-
-typedef struct {
-    void *data;
-    EntityType type;
-} Entity;
-
 typedef struct {
     Size size;
-    Map *map;
 } Board;
 
 Board* NewBoard(Size size);
-void UpdateBoard(Board *board);
-Entity* GetBoardMapEntityAt(Board *board, Point point);
-void SetBoardMapEntityAt(Board *board, Point point, Entity *enity);
 
 void DrawBoard(Board *board);
 void DrawGuides(Board *board);
 void DrawGuidesColumns(int);
 void DrawGuidesRows(int);
-void DrawEntities(Board *board);
 
 int main() {
     SetTargetFPS(60);
@@ -44,9 +25,8 @@ int main() {
 
     Board *board = NewBoard((Size){10, 10});
 
-    InitWindow(800, 800, "Snake!");
+    InitWindow(900, 900, "Snake!");
     while (!WindowShouldClose()) {
-        UpdateBoard(board);
         BeginDrawing();
             ClearBackground(RAYWHITE);
             DrawBoard(board);
@@ -57,44 +37,12 @@ int main() {
 
 Board* NewBoard(Size size) {
     Board *board = (Board*)malloc(sizeof(Board));
-    Map *map = g_hash_table_new(NULL, NULL);
-
-    *board = (Board){
-        size,
-        map
-    };
-
+    *board = (Board){size};
     return board;
-}
-
-void UpdateBoard(Board *board) {
-    // Code here!
-}
-
-Entity* GetBoardMapEntityAt(Board *board, Point point) {
-    Entity *entity;
-    g_hash_table_lookup_extended(
-        board->map, 
-        &point,
-        NULL,
-        (void**)&entity
-    );
-    return entity;
-}
-
-void SetBoardMapEntityAt(Board *board, Point point, Entity *entity) {
-    Point *dynPoint = (Point*)malloc(sizeof(Point));
-    *dynPoint = point;
-    g_hash_table_insert(
-        board->map,
-        dynPoint,
-        entity
-    );
 }
 
 void DrawBoard(Board *board) {
     DrawGuides(board);
-    DrawEntities(board);
 }
 
 void DrawGuides(Board *board) {
@@ -125,34 +73,5 @@ void DrawGuidesRows(int numberOfRows) {
             row * rowSpacing,
             GRAY
         );
-    }
-}
-
-void DrawEntities(Board *board) {
-    GHashTableIter iterator;
-    Point *point;
-    Entity *entity;
-    g_hash_table_iter_init(&iterator, board->map);
-    while (g_hash_table_iter_next(&iterator, (gpointer*)&point, (gpointer*)&entity)) {
-        switch (entity->type) {
-            case FOOD: {
-                DrawRectangle(
-                    point->x * (GetScreenWidth() / board->size.numberOfColumns),
-                    point->y * (GetScreenHeight() / board->size.numberOfRows),
-                    GetScreenWidth() / board->size.numberOfColumns,
-                    GetScreenHeight() / board->size.numberOfRows,
-                    RED
-                );
-            }
-            case SNAKE: {
-                DrawRectangle(
-                    point->x * (GetScreenWidth() / board->size.numberOfColumns),
-                    point->y * (GetScreenHeight() / board->size.numberOfRows),
-                    GetScreenWidth() / board->size.numberOfColumns,
-                    GetScreenHeight() / board->size.numberOfRows,
-                    GREEN
-                );
-            }
-        }
     }
 }
