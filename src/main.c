@@ -1,8 +1,8 @@
 #include <raylib.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <stdio.h>
 #include <glib.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdint.h>
 #include <time.h>
 
 #define FINISHED TRUE
@@ -28,7 +28,7 @@ typedef enum {
     DOWN,
 } Direction;
 
-typedef bool State;
+typedef gboolean State;
 
 typedef struct {
     Size size;
@@ -75,13 +75,13 @@ int main() {
 
     while (!WindowShouldClose()) {
 
-        if (IsKeyPressed(KEY_D)) {
+        if (IsKeyPressed(KEY_D) && board->direction != LEFT) {
             board->direction = RIGHT;
-        } else if (IsKeyPressed(KEY_S)) {
+        } else if (IsKeyPressed(KEY_S) && board->direction != UP) {
             board->direction = DOWN;
-        } else if (IsKeyPressed(KEY_A)) {
+        } else if (IsKeyPressed(KEY_A) && board->direction != RIGHT) {
             board->direction = LEFT;
-        } else if (IsKeyPressed(KEY_W)) {
+        } else if (IsKeyPressed(KEY_W) && board->direction != DOWN) {
             board->direction = UP;
         }
 
@@ -239,7 +239,7 @@ void DrawEntities(Board *board) {
                 color
             );
 
-            // Debug info!
+            // // Debug info!
             DrawText(
                 TextFormat("%d", entity), 
                 column * spacing.width, 
