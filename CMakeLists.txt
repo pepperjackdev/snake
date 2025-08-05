@@ -36,7 +36,7 @@ if(EMSCRIPTEN)
 
     set_target_properties(snake PROPERTIES SUFFIX ".html")
 
-    target_compile_options(snake PRIVATE -O2 -Ad=1)
+    target_compile_options(snake PRIVATE -O2)
 else()
     # Native build path
 
