@@ -10,11 +10,15 @@ b: g
 g:
 	cmake -S . -B build/
 
-eg:
-	emcmake cmake -B wabuild/
+# Runs the project on a web browser
+er: eb
+	emrun wabuild/snake.html
 
+# Builds the sources with emcc
 eb: eg
 	cmake --build wabuild 
 
-er: eb
-	emrun wabuild/snake.html
+# Generates the build-system's scripts for emscripten
+eg:
+	emcmake cmake -B wabuild/
+
