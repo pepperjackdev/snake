@@ -76,7 +76,7 @@ int main() {
     SetTargetFPS(60);
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
 
-    Board *board = NewBoard((Size){20, 20});
+    Board *board = NewBoard((Size){10, 10});
 
     InitWindow(900, 900, "Snake!");
     double start = GetTime();
@@ -297,7 +297,7 @@ void DrawGuidesColumns(int width) {
             0,
             column * columnSpacing, 
             GetScreenHeight(),
-            GRAY
+            BLACK
         );
     }
 }
@@ -310,7 +310,7 @@ void DrawGuidesRows(int height) {
             row * rowSpacing,
             GetScreenWidth(),
             row * rowSpacing,
-            GRAY
+            BLACK
         );
     }
 }

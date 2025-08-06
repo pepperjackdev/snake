@@ -34,13 +34,13 @@ if(EMSCRIPTEN)
         "-s FULL_ES2=1"
         "-s ALLOW_MEMORY_GROWTH=1"
         "-s ASYNCIFY"
-        "-s NO_EXIT_RUNTIME=1"
         "-s EXPORTED_RUNTIME_METHODS=['requestFullscreen']"
+        "--shell-file ${CMAKE_SOURCE_DIR}/shell.html"
     )
 
     set_target_properties(snake PROPERTIES SUFFIX ".html")
 
-    target_compile_options(snake PRIVATE -O2)
+    target_compile_options(snake PRIVATE -O2) 
 
 else()
     message(STATUS "Configuring for native build")

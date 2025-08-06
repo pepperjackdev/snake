@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <title>Raylib WebAssembly</title>
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        background-color: black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      canvas {
+        aspect-ratio: 1 / 1;
+        width: min(90vmin, 600px);
+        height: auto;
+        display: block;
+        background-color: black;
+        border: none;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas" oncontextmenu="event.preventDefault()" tabindex="-1"></canvas>
+    <script type="text/javascript">
+      const canvas = document.getElementById('canvas');
+      canvas.addEventListener("webglcontextlost", (e) => {
+        alert('WebGL context lost. Reload the page.');
+        e.preventDefault();
+      });
+
+      var Module = {
+        canvas: canvas,
+      };
+    </script>
+    {{{ SCRIPT }}}
+  </body>
+</html>
