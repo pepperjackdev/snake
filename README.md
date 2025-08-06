@@ -1,6 +1,7 @@
 # Snake
-
 A minimal Snake game!
+
+<img width="301" height="313" alt="Screenshot 2025-08-06 150850" src="https://github.com/user-attachments/assets/3af4b8b3-ec0f-4148-a5c8-6b74802db3fa" />
 
 ## Installation
 
