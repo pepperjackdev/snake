@@ -62,3 +62,6 @@ You can also build the project using CMake directly:
    ```bash
    ninja
    ```
+
+## Playing the game
+The game is extremely ~lazily developed~ minimal. Just run it and start playing by moving the snake with your `WASD` keys. To replay, simply close and re-run the game.
